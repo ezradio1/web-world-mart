@@ -7,7 +7,7 @@ const Header = () => {
           EA
         </div>
         <div className="text-white">
-          <p className="text-xs font-medium">Ezra Audivano Dirfa</p>
+          <p className="text-xs font-medium max-w-[110px] truncate">Ezra Audivano Dirfa</p>
           <p className="text-[10px]">Superadmin</p>
         </div>
       </div>

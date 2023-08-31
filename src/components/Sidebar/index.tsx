@@ -13,7 +13,7 @@ const Sidebar = (props: SidebarProps) => {
       className={clsx(
         "bg-primary z-10 h-screen overflow-hidden relative transition-all duration-500 ease-out",
         {
-          "w-[230px]": !isCollapse,
+          "w-[200px]": !isCollapse,
           "w-0": isCollapse,
         }
       )}

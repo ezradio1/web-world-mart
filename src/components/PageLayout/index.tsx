@@ -18,7 +18,7 @@ const PageLayout = (props: PageLayoutProps) => {
           "cursor-pointer absolute bg-primary z-10 rounded p-1 top-5 ease-out transition-all duration-500",
           {
             "-left-2": isCollapse,
-            "left-[190px]": !isCollapse,
+            "left-[170px]": !isCollapse,
           }
         )}
         onClick={() => setIsCollapse((prevState) => !prevState)}
@@ -30,7 +30,7 @@ const PageLayout = (props: PageLayoutProps) => {
         className={clsx(
           "absolute md:relative flex flex-col justify-between w-screen h-screen",
           {
-            "md:w-[calc(100vw-230px)]": !isCollapse,
+            "md:w-[calc(100vw-200px)]": !isCollapse,
             "md:w-screen": isCollapse,
           }
         )}
