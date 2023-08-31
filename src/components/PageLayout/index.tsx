@@ -8,14 +8,16 @@ import Navbar from "../Navbar";
 
 const PageLayout = (props: PageLayoutProps) => {
   const { children } = props;
-  const { isCollapse, setIsCollapse } = useIndex();
+  const { isCollapse, setIsCollapse, sidebarRef } = useIndex();
 
   return (
     <div className="flex">
-      <Sidebar isCollapse={isCollapse} />
+      <div ref={sidebarRef}>
+        <Sidebar isCollapse={isCollapse} />
+      </div>
       <div
         className={clsx(
-          "cursor-pointer absolute bg-primary z-10 rounded p-1 top-5 ease-out transition-all duration-500",
+          "cursor-pointer absolute z-10 bg-primary rounded p-1 top-5 ease-out transition-all duration-500",
           {
             "-left-2": isCollapse,
             "left-[170px]": !isCollapse,
@@ -36,8 +38,7 @@ const PageLayout = (props: PageLayoutProps) => {
         )}
       >
         <Navbar />
-        <div className="bg-gray-100 h-full p-4">{children}</div>
-
+        <div className="bg-gray-100 h-full p-4 overflow-y-auto">{children}</div>
         <Footer />
       </div>
     </div>

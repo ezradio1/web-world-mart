@@ -1,6 +1,10 @@
-"use client"
+"use client";
 import PageLayout from "@/components/PageLayout";
 
 export default function Home() {
-  return <PageLayout>Content</PageLayout>;
+  return (
+    <PageLayout>
+      <div className="h-screen">Content</div>
+    </PageLayout>
+  );
 }
