@@ -8,6 +8,9 @@ import { FiSearch } from "react-icons/fi";
 import useIndex from "./index.hook";
 import useFilterOptions from "./hooks/useFilterOptions";
 import Select from "@/components/Select";
+import ModalDelete from "./components/ModalDelete";
+import { MODAL_STATE } from "./index.constants";
+import ModalForm from "./components/ModalForm";
 
 const Products = () => {
   const {
@@ -24,11 +27,29 @@ const Products = () => {
     handleChangeCategory,
     handleChangeBrand,
     productList,
+    modal,
+    setModal,
+    selectedData,
+    refetch,
   } = useIndex();
   const { brandList, categoryList } = useFilterOptions();
 
   return (
     <div>
+      <ModalDelete
+        title={modal}
+        isOpen={modal === MODAL_STATE.DELETE}
+        onClose={() => setModal("")}
+        selectedData={selectedData}
+        getData={refetch}
+      />
+      <ModalForm
+        title={modal}
+        isOpen={modal === MODAL_STATE.ADD || modal === MODAL_STATE.EDIT}
+        onClose={() => setModal("")}
+        selectedData={selectedData}
+        getData={refetch}
+      />
       <ContentLayout title="Product List">
         <div className="p-3 rounded-sm bg-white flex flex-col md:flex-row gap-2 justify-between border">
           <div className="flex gap-2">
@@ -61,7 +82,7 @@ const Products = () => {
               additionalValueText="Category: "
             />
           </div>
-          <Button>Add Product</Button>
+          <Button onClick={() => setModal(MODAL_STATE.ADD)}>Add Product</Button>
         </div>
         <div className="mt-2">
           <Table

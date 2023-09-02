@@ -11,27 +11,31 @@ const useFetchData = <T extends unknown>(props: UseFetchDataProps<T>) => {
     error: null,
   });
 
+  const fetchData = async ({ url, params }: UseFetchDataProps<T>) => {
+    setReturnValue({ data: null, loading: true, error: null });
+    try {
+      const response: AxiosResponse<T> = await axios(
+        `${process.env.NEXT_PUBLIC_API_URL}${url}`,
+        { params }
+      );
+      setReturnValue({ data: response.data, loading: false, error: null });
+    } catch (error: any) {
+      setReturnValue({
+        data: null,
+        loading: false,
+        error,
+      });
+    }
+  };
   useEffect(() => {
-    const fetchData = async ({ url, params }: UseFetchDataProps<T>) => {
-      setReturnValue({ data: null, loading: true, error: null });
-      try {
-        const response: AxiosResponse<T> = await axios(
-          `${process.env.NEXT_PUBLIC_API_URL}${url}`,
-          { params }
-        );
-        setReturnValue({ data: response.data, loading: false, error: null });
-      } catch (error: any) {
-        setReturnValue({
-          data: null,
-          loading: false,
-          error,
-        });
-      }
-    };
     fetchData({ url, params });
   }, [url, params]);
 
-  return { ...returnValue };
+  const refetch = () => {
+    fetchData(props);
+  };
+
+  return { ...returnValue, refetch };
 };
 
 export default useFetchData;

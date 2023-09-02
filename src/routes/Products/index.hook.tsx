@@ -5,7 +5,7 @@ import useFetchData from "@/hooks/useFetchData";
 import useGetAllQueryParams from "@/hooks/useGetAllQueryParams";
 import { usePathname } from "next/navigation";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { PRODUCT_API_ENDPOINT } from "./index.constants";
+import { MODAL_STATE, PRODUCT_API_ENDPOINT } from "./index.constants";
 import type { ProductData, ProductResponse, QueryParams } from "./index.types";
 
 const useIndex = () => {
@@ -17,6 +17,8 @@ const useIndex = () => {
     category: category || "",
     brand: brand || "",
   });
+  const [modal, setModal] = useState("");
+  const [selectedData, setSelectedData] = useState<ProductData | undefined>();
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [searchValue, setSearchValue] = useState(q);
   const [brandValue, setBrandValue] = useState(brand);
@@ -27,7 +29,7 @@ const useIndex = () => {
       ? PRODUCT_API_ENDPOINT.SEARCH_PRODUCT
       : PRODUCT_API_ENDPOINT.ALL_PRODUCT
   );
-  const { data, loading, error } = useFetchData<ProductResponse>({
+  const { data, loading, error, refetch } = useFetchData<ProductResponse>({
     url,
     params: queryParams,
   });
@@ -86,7 +88,37 @@ const useIndex = () => {
       key: "stock",
       header: "stock",
     },
+    {
+      key: "action",
+      header: "",
+      render: (data) => (
+        <div className="flex gap-3">
+          <p
+            className="text-blue-500 hover:font-semibold cursor-pointer transition-all"
+            onClick={() => handleEditProduct(data)}
+          >
+            Edit
+          </p>
+          <p
+            className="text-red-500 hover:font-semibold cursor-pointer transition-all"
+            onClick={() => handleDeleteProduct(data)}
+          >
+            Delete
+          </p>
+        </div>
+      ),
+    },
   ];
+
+  const handleEditProduct = (data: ProductData) => {
+    setModal(MODAL_STATE.EDIT);
+    setSelectedData(data);
+  };
+
+  const handleDeleteProduct = (data: ProductData) => {
+    setModal(MODAL_STATE.DELETE);
+    setSelectedData(data);
+  };
 
   const handleChangeSearch = (evt: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(evt.target.value);
@@ -164,6 +196,10 @@ const useIndex = () => {
     handleChangeCategory,
     handleChangeBrand,
     productList: productList(),
+    modal,
+    setModal,
+    selectedData,
+    refetch,
   };
 };
 

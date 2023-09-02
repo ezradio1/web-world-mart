@@ -3,3 +3,9 @@ export const PRODUCT_API_ENDPOINT = {
   SEARCH_PRODUCT: "products/search",
   FILTER_PRODUCT_BY_CATEGORY: "products/category",
 };
+
+export const MODAL_STATE = {
+  ADD: "Add Product",
+  EDIT: "Edit Product",
+  DELETE: "Delete Product",
+};
