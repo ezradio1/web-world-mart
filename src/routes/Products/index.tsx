@@ -1,16 +1,14 @@
 import Button from "@/components/Button";
 import ContentLayout from "@/components/ContentLayout";
 import Input from "@/components/Input";
-import { PaginationParams } from "@/components/Pagination/index.types";
-import Table from "@/components/Table";
-import React, { useCallback } from "react";
-import { FiSearch } from "react-icons/fi";
-import useIndex from "./index.hook";
-import useFilterOptions from "./hooks/useFilterOptions";
 import Select from "@/components/Select";
+import Table from "@/components/Table";
+import { useFilterOptionContext } from "@/context/FilterOptionsContext";
+import { FiSearch } from "react-icons/fi";
 import ModalDelete from "./components/ModalDelete";
-import { MODAL_STATE } from "./index.constants";
 import ModalForm from "./components/ModalForm";
+import { MODAL_STATE } from "./index.constants";
+import useIndex from "./index.hook";
 
 const Products = () => {
   const {
@@ -32,7 +30,7 @@ const Products = () => {
     selectedData,
     refetch,
   } = useIndex();
-  const { brandList, categoryList } = useFilterOptions();
+  const { brandList, categoryList } = useFilterOptionContext();
 
   return (
     <div>
@@ -51,13 +49,13 @@ const Products = () => {
         getData={refetch}
       />
       <ContentLayout title="Product List">
-        <div className="p-3 rounded-sm bg-white flex flex-col md:flex-row gap-2 justify-between border">
-          <div className="flex gap-2">
+        <div className="p-3 rounded-sm bg-white flex flex-col md:flex-row flex-wrap gap-2 justify-between  border">
+          <div className="flex gap-2 flex-wrap flex-col md:flex-row">
             <Input
               withError={false}
               placeholder="Search product here..."
               icon={<FiSearch color="gray" />}
-              className="min-w-[260px]"
+              className="min-w-[220px]"
               value={searchValue}
               onChange={handleChangeSearch}
             />
@@ -82,7 +80,14 @@ const Products = () => {
               additionalValueText="Category: "
             />
           </div>
-          <Button onClick={() => setModal(MODAL_STATE.ADD)}>Add Product</Button>
+          <div className="flex justify-end">
+            <Button
+              onClick={() => setModal(MODAL_STATE.ADD)}
+              className="w-full md:w-fit"
+            >
+              Add Product
+            </Button>
+          </div>
         </div>
         <div className="mt-2">
           <Table

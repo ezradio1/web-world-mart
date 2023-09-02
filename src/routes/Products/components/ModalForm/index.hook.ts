@@ -16,14 +16,17 @@ const useIndex = ({
   const putData = usePutData();
   const { showToast } = useToastContext();
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState<ProductForm>({
-    title: "",
-    price: 0,
-  });
-  const [error, setError] = useState({
+  const initialValue = {
     title: "",
     price: "",
-  });
+    brand: "",
+    category: "",
+    stock: "",
+    discountPercentage: "",
+  };
+  const initialForm = initialValue as unknown as ProductForm;
+  const [form, setForm] = useState<ProductForm>(initialForm);
+  const [error, setError] = useState(initialValue);
   const [isEdit, setIsEdit] = useState(false);
   const [isEnterOnce, setIsEnterOnce] = useState(false);
 
@@ -36,6 +39,10 @@ const useIndex = ({
       setForm({
         title: selectedData.title,
         price: selectedData.price,
+        brand: selectedData.brand,
+        category: selectedData.category,
+        stock: selectedData.stock,
+        discountPercentage: selectedData.discountPercentage,
       });
     }
   }, [selectedData]);
@@ -68,6 +75,8 @@ const useIndex = ({
       : await postData<ProductForm>("products/add", form);
     setLoading(false);
     if (!error) {
+      setIsEnterOnce(false);
+      setForm(initialForm);
       onClose();
       showToast({
         show: true,
