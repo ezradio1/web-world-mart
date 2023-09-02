@@ -1,14 +1,18 @@
 import useClickOutside from "@/hooks/useClickOutside";
-import { useRef, useState } from "react";
+import useIsMobile from "@/hooks/useIsMobile";
+import { useEffect, useRef, useState } from "react";
 
 const useIndex = () => {
-  const [isCollapse, setIsCollapse] = useState(() => {
-    return window.matchMedia(`(max-width: 768px)`).matches;
-  });
+  const { isMobile } = useIsMobile();
+  const [isCollapse, setIsCollapse] = useState(isMobile);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    setIsCollapse(isMobile);
+  }, [isMobile]);
+
   useClickOutside(sidebarRef, () => {
-    setIsCollapse(true);
+    if (isMobile) setIsCollapse(true);
   });
 
   return { isCollapse, setIsCollapse, sidebarRef };

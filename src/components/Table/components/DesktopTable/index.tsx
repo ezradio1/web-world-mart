@@ -8,7 +8,7 @@ const DesktopTable = <T extends unknown>(props: TableProps<T>) => {
     columns,
     data,
     loading,
-    currentPage,
+    skip,
     rowsPerPage = 5,
   } = props;
 
@@ -21,6 +21,7 @@ const DesktopTable = <T extends unknown>(props: TableProps<T>) => {
 
     return alignment[value];
   };
+  const currentPage = skip / rowsPerPage + 1;
 
   return (
     <div>

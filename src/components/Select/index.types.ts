@@ -10,4 +10,5 @@ export interface SelectProps extends InputHTMLAttributes<HTMLInputElement> {
   clearIcon?: boolean;
   errorMsg?: string;
   withError?: boolean;
+  optionPosition?: "top" | "bottom";
 }

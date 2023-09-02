@@ -1,10 +1,12 @@
-"use client";
-import PageLayout from "@/components/PageLayout";
+import { PRODUCTS_ROUTE } from "@/constants/routes";
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "WebWorldMart",
+  icons: "favicon.ico",
+};
 
 export default function Home() {
-  return (
-    <PageLayout>
-      <div className="h-screen">Content</div>
-    </PageLayout>
-  );
+  redirect(PRODUCTS_ROUTE);
 }

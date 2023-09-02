@@ -3,47 +3,76 @@ import { noop } from "@/utils/noop";
 import clsx from "clsx";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { ELLIPSIS } from "./index.constants";
-import type { PaginationProps } from "./index.types";
+import type { PaginationParams, PaginationProps } from "./index.types";
 
 const Pagination = (props: PaginationProps) => {
-  const { isPrevDisabled, isNextDisabled, currentPage, onChangePagination } =
-    props;
+  const {
+    isPrevDisabled,
+    isNextDisabled,
+    currentPage,
+    onChangePagination,
+    paginationLength,
+    rowsPerPage,
+    skip,
+  } = props;
 
-  let pageNumbers = Array.from({ length: currentPage }, (_, index) =>
+  let pageNumbers = Array.from({ length: paginationLength }, (_, index) =>
     String(index + 1)
   );
 
   if (pageNumbers.length > 9) {
-    const firstPart = pageNumbers.slice(0, 2);
-    const middlePart = [
+    let firstPart = pageNumbers.slice(0, 1);
+    let middlePart = [
       ELLIPSIS,
-      ...pageNumbers.slice(
-        Math.max(0, currentPage / 2 - 1),
-        Math.min(currentPage, currentPage / 2 + 1)
-      ),
+      ...Array.from({ length: 5 }, (_, i) => String(currentPage - 2 + i)),
       ELLIPSIS,
     ];
-    const lastPart = pageNumbers.slice(-2);
+
+    const firstElement = Number(pageNumbers[0]);
+    const lastElement = Number(pageNumbers[pageNumbers.length - 1]);
+    if (currentPage + 3 >= lastElement) {
+      middlePart = [
+        ELLIPSIS,
+        ...Array.from({ length: 5 }, (_, i) =>
+          String(lastElement - 1 - i)
+        ).reverse(),
+      ];
+    } else if (currentPage - 3 <= firstElement) {
+      firstPart = pageNumbers.slice(0, 5);
+      middlePart = [ELLIPSIS];
+    }
+
+    const lastPart = pageNumbers.slice(-1);
     pageNumbers = [];
     pageNumbers.push(...firstPart, ...middlePart, ...lastPart);
   }
 
   const actionClassName = (isDisabled: boolean, page = "") =>
     clsx(
-      "rounded transition-all md:w-10 md:h-10 h-7 w-7 text-xs md:text-sm flex justify-center items-center",
+      "rounded transition-all md:w-8 md:h-8 h-7 w-7 text-xs md:text-sm flex justify-center items-center",
       {
         "cursor-not-allowed": isDisabled,
-        "cursor-pointer hover:border-primary border-gray-400": !isDisabled,
+        "cursor-pointer hover:border-primary border-gray-400":
+          !isDisabled && page !== ELLIPSIS,
         border: page !== ELLIPSIS,
         "cursor-default": page === ELLIPSIS,
       }
     );
 
+  const onChangePaginate = (key: PaginationParams) => {
+    const currentSkipValue =
+      typeof key === "number"
+        ? rowsPerPage * (key - 1)
+        : eval(`${skip} ${key} ${rowsPerPage}`);
+
+    onChangePagination(currentSkipValue);
+  };
+
   return (
     <div className="flex gap-1 md:gap-2">
       <div
         className={actionClassName(isPrevDisabled)}
-        onClick={isPrevDisabled ? noop : () => onChangePagination("-")}
+        onClick={isPrevDisabled ? noop : () => onChangePaginate("-")}
       >
         <FiChevronLeft color={isPrevDisabled ? GRAY["300"] : PRIMARY} />
       </div>
@@ -53,9 +82,9 @@ const Pagination = (props: PaginationProps) => {
             "bg-primary text-white": currentPage === Number(page),
           })}
           onClick={
-            isPrevDisabled || page === ELLIPSIS
+            page === ELLIPSIS || currentPage === Number(page)
               ? noop
-              : () => onChangePagination(Number(page))
+              : () => onChangePaginate(Number(page))
           }
           key={key}
         >
@@ -64,7 +93,7 @@ const Pagination = (props: PaginationProps) => {
       ))}
       <div
         className={actionClassName(isNextDisabled)}
-        onClick={isNextDisabled ? noop : () => onChangePagination("+")}
+        onClick={isNextDisabled ? noop : () => onChangePaginate("+")}
       >
         <FiChevronRight color={isNextDisabled ? GRAY["300"] : PRIMARY} />
       </div>

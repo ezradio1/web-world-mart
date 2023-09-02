@@ -1,4 +1,3 @@
-;
 import type { SelectProps } from "./index.types";
 import clsx from "clsx";
 import { FiChevronDown } from "react-icons/fi";
@@ -17,6 +16,7 @@ const Select = (props: SelectProps) => {
     withError = true,
     errorMsg = "",
     className = "",
+    optionPosition = "bottom",
   } = props;
   const {
     isOpen,
@@ -33,7 +33,11 @@ const Select = (props: SelectProps) => {
           {label}
         </label>
       ) : null}
-      <div ref={selectRef} onClick={() => setIsOpen(!isOpen)} className="cursor-pointer">
+      <div
+        ref={selectRef}
+        onClick={() => setIsOpen(!isOpen)}
+        className="cursor-pointer"
+      >
         <div className="relative">
           <input
             {...props}
@@ -46,7 +50,7 @@ const Select = (props: SelectProps) => {
             }
             readOnly
             className={clsx(
-              "rounded w-full py-[6px] h-10 px-[16px] text-sm  outline-primary border-gray-400 border font-medium",
+              "rounded truncate w-full py-[6px] h-10 px-[16px] pr-6 text-sm  outline-primary border-gray-400 border font-medium",
               {
                 "border-red-500": errorMsg !== "",
               },
@@ -81,10 +85,11 @@ const Select = (props: SelectProps) => {
         <div className="relative">
           <div
             className={clsx(
-              "absolute z-20 bg-white w-full border shadow-lg mt-[1px] rounded overflow-hidden transition-all",
+              "absolute z-20 max-h-[200px] overflow-y-auto bg-white w-full border shadow-lg mt-[1px] rounded overflow-hidden transition-all",
               {
                 "h-fit translate-y-1": isOpen,
                 "h-0 -translate-y-8 opacity-0": !isOpen,
+                "bottom-12": optionPosition === "top",
               }
             )}
           >

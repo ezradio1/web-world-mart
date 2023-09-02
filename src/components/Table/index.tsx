@@ -12,9 +12,10 @@ const Table = <T extends unknown>(props: TableProps<T>) => {
     columns,
     data,
     onChangePagination,
-    currentPage,
+    skip,
     rowsPerPage = 5,
     onChangeRowPerPage = noop,
+    totalData,
   } = props;
   const { isMobile } = useIsMobile();
 
@@ -23,6 +24,7 @@ const Table = <T extends unknown>(props: TableProps<T>) => {
     ...columns,
   ];
 
+  const currentPage = skip / rowsPerPage + 1;
   return (
     <div>
       <div className="w-full overflow-x-auto">
@@ -36,6 +38,7 @@ const Table = <T extends unknown>(props: TableProps<T>) => {
         <div className="flex gap-2 items-center">
           <p className="text-xs">Rows per page: </p>
           <Select
+            optionPosition="top"
             options={PER_PAGE_OPTIONS}
             value={rowsPerPage}
             className="w-16 h-7 md:h-10"
@@ -46,9 +49,12 @@ const Table = <T extends unknown>(props: TableProps<T>) => {
         </div>
         <Pagination
           isPrevDisabled={data.length === 0 || currentPage === 1}
-          isNextDisabled={data.length === 0 && currentPage > 1}
+          isNextDisabled={data.length * currentPage === totalData}
           onChangePagination={onChangePagination}
           currentPage={currentPage}
+          paginationLength={Math.ceil(totalData / rowsPerPage)}
+          rowsPerPage={rowsPerPage}
+          skip={skip}
         />
       </div>
     </div>
