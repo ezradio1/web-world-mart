@@ -57,6 +57,18 @@ const useIndex = ({
         ...prevState,
         [el]: formField === "" ? REQUIRED_MSG : "",
       }));
+
+      if (
+        (el === "price" || el === "stock" || el === "discountPercentage") &&
+        Number(formField) <= 0 &&
+        formField !== ""
+      ) {
+        isValid = false;
+        setError((prevState) => ({
+          ...prevState,
+          [el]: "This filed must be more than 0",
+        }));
+      }
     });
 
     return isValid;

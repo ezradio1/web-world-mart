@@ -43,6 +43,8 @@ const useIndex = () => {
         ...queryParams,
         q: searchValue || undefined,
         skip: searchValue ? skip : 0,
+        brand: queryParams.brand || undefined,
+        category: queryParams.category || undefined,
       };
       if (searchValue) {
         setLoadingSearch(true);

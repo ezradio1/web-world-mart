@@ -8,11 +8,11 @@ export interface ModalFormProps extends ModalProps {
 
 export interface ProductForm {
   title: string;
-  price: number | '';
+  price: number | "";
   brand: string;
   category: string;
-  stock: number | '';
-  discountPercentage: number | '';
+  stock: number | "";
+  discountPercentage: number | "";
 }
 
-export type FieldType = "title" | "price";
+export type FieldType = "title" | "price" | "discountPercentage" | "stock";
