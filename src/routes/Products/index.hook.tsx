@@ -6,13 +6,20 @@ import useGetAllQueryParams from "@/hooks/useGetAllQueryParams";
 import { usePathname } from "next/navigation";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { MODAL_STATE, PRODUCT_API_ENDPOINT } from "./index.constants";
-import type { ProductData, ProductResponse, QueryParams } from "./index.types";
+import type {
+  PriceFilter,
+  ProductData,
+  ProductResponse,
+  QueryParams,
+} from "./index.types";
 
 const useIndex = () => {
-  const { q, skip, limit, category, brand } = useGetAllQueryParams();
+  const { q, skip, limit, category, brand, min, max } = useGetAllQueryParams();
   const [queryParams, setQueryParams] = useState<QueryParams>({
     limit: Number(limit || 10),
     skip: Number(skip || 0),
+    min: min ? Number(min) : undefined,
+    max: max ? Number(max) : undefined,
     q,
     category: category || "",
     brand: brand || "",
@@ -22,6 +29,10 @@ const useIndex = () => {
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [searchValue, setSearchValue] = useState(q);
   const [brandValue, setBrandValue] = useState(brand);
+  const [priceFilter, setPriceFilter] = useState<PriceFilter>({
+    min: min ? Number(min) : undefined,
+    max: max ? Number(max) : undefined,
+  });
   const [url, setUrl] = useState(
     category
       ? `${PRODUCT_API_ENDPOINT.FILTER_PRODUCT_BY_CATEGORY}/${category}`
@@ -45,6 +56,8 @@ const useIndex = () => {
         skip: searchValue ? skip : 0,
         brand: queryParams.brand || undefined,
         category: queryParams.category || undefined,
+        min: queryParams.min || undefined,
+        max: queryParams.max || undefined,
       };
       if (searchValue) {
         setLoadingSearch(true);
@@ -179,10 +192,26 @@ const useIndex = () => {
       );
     } else if (brandValue) {
       return data?.products.filter((el) => el.brand === brandValue);
+    } else if (priceFilter.max && priceFilter.min) {
+      return data?.products.filter(
+        (el) =>
+          el.price >= Number(priceFilter.min) &&
+          el.price <= Number(priceFilter.max)
+      );
     } else {
       return data?.products;
     }
   }, [data?.products, searchValue, brandValue]);
+
+  const handleSubmitPriceFilter = (value: { min: number; max: number }) => {
+    setPriceFilter(value);
+    handleSetQueryParams({ ...queryParams, min: value.min, max: value.max });
+  };
+
+  const handleClearPriceFilter = () => {
+    setPriceFilter({ min: 0, max: 0 });
+    handleSetQueryParams({ ...queryParams, min: undefined, max: undefined });
+  };
 
   return {
     columns,
@@ -202,6 +231,8 @@ const useIndex = () => {
     setModal,
     selectedData,
     refetch,
+    handleSubmitPriceFilter,
+    handleClearPriceFilter,
   };
 };
 

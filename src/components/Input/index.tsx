@@ -11,6 +11,7 @@ const Input = (props: InputProps) => {
     withError = true,
     icon = null,
     className = "",
+    prefix = null,
   } = props;
 
   return (
@@ -28,12 +29,15 @@ const Input = (props: InputProps) => {
             "rounded w-full py-[6px] h-10 px-[16px] text-sm  outline-primary border-gray-400 border font-medium",
             {
               "border-red-500": errorMsg !== "",
-              "pl-8": icon,
+              "pl-8": icon || prefix,
             }
           )}
         >
           {children}
         </input>
+        <div className="absolute top-1/2 -translate-y-1/2 transform left-3 text-sm">
+          {prefix}
+        </div>
         <div className="absolute top-1/2 -translate-y-1/2 transform left-3">
           {icon}
         </div>

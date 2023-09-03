@@ -8,4 +8,5 @@ export const MODAL_STATE = {
   ADD: "Add Product",
   EDIT: "Edit Product",
   DELETE: "Delete Product",
+  PRICE_RANGE: "Filter Price Range",
 };

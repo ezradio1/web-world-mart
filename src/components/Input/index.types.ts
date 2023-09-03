@@ -5,4 +5,5 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   errorMsg?: string;
   withError?: boolean;
   icon?: ReactNode;
+  prefix?: string;
 }

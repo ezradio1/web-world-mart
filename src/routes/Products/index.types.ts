@@ -17,3 +17,8 @@ export interface ProductResponse {
 
 export interface QueryParams
   extends Record<string, string | number | undefined> {}
+
+export interface PriceFilter {
+  min: number | undefined;
+  max: number | undefined;
+}

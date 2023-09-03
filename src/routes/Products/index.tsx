@@ -9,6 +9,9 @@ import ModalDelete from "./components/ModalDelete";
 import ModalForm from "./components/ModalForm";
 import { MODAL_STATE } from "./index.constants";
 import useIndex from "./index.hook";
+import ModalPriceRange from "./components/ModalPriceRange";
+import { AiFillCloseCircle } from "react-icons/ai";
+import PriceFilterInput from "./components/PriceFilterInput";
 
 const Products = () => {
   const {
@@ -29,6 +32,8 @@ const Products = () => {
     setModal,
     selectedData,
     refetch,
+    handleSubmitPriceFilter,
+    handleClearPriceFilter,
   } = useIndex();
   const { brandList, categoryList } = useFilterOptionContext();
 
@@ -47,6 +52,12 @@ const Products = () => {
         onClose={() => setModal("")}
         selectedData={selectedData}
         getData={refetch}
+      />
+      <ModalPriceRange
+        title={modal}
+        isOpen={modal === MODAL_STATE.PRICE_RANGE}
+        onClose={() => setModal("")}
+        onSubmitFilter={handleSubmitPriceFilter}
       />
       <ContentLayout title="Product List">
         <div className="p-3 rounded-sm bg-white flex flex-col md:flex-row flex-wrap gap-2 justify-between  border">
@@ -78,6 +89,16 @@ const Products = () => {
               onChange={handleChangeCategory}
               clearIcon
               additionalValueText="Category: "
+            />
+
+            <PriceFilterInput
+              onClick={() => setModal(MODAL_STATE.PRICE_RANGE)}
+              value={
+                queryParams.min && queryParams.max
+                  ? `$${queryParams.min} - $${queryParams.max}`
+                  : ""
+              }
+              onClear={handleClearPriceFilter}
             />
           </div>
           <div className="flex justify-end">
