@@ -5,9 +5,12 @@ import Header from "./components/Header";
 import ItemMenu from "./components/ItemMenu";
 import { SIDEBAR_MENUS } from "./index.constants";
 import type { SidebarProps } from "./index.types";
+import useIndex from "./index.hook";
 
 const Sidebar = (props: SidebarProps) => {
   const { isCollapse } = props;
+  const { isActiveMenu } = useIndex();
+
   return (
     <aside
       className={clsx(
@@ -22,7 +25,7 @@ const Sidebar = (props: SidebarProps) => {
 
       <div className="mt-8">
         {SIDEBAR_MENUS.map((menu, key) => (
-          <ItemMenu key={key} {...menu} isActive={key % 2 === 0} />
+          <ItemMenu key={key} {...menu} isActive={isActiveMenu(menu.route)} />
         ))}
       </div>
     </aside>

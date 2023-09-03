@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { ReturnValue, UseFetchDataProps } from "./index.types";
 
 const useFetchData = <T extends unknown>(props: UseFetchDataProps<T>) => {
-  const { url, params } = props;
+  const { url, params, skip = false } = props;
   const [returnValue, setReturnValue] = useState<ReturnValue<T>>({
     data: null,
     loading: false,
@@ -28,8 +28,8 @@ const useFetchData = <T extends unknown>(props: UseFetchDataProps<T>) => {
     }
   };
   useEffect(() => {
-    fetchData({ url, params });
-  }, [url, params]);
+    if (!skip) fetchData({ url, params });
+  }, [url, params, skip]);
 
   const refetch = () => {
     fetchData(props);

@@ -4,7 +4,7 @@ import clsx from "clsx";
 import type { TableProps } from "../../index.types";
 
 const MobileTable = <T extends unknown>(props: TableProps<T>) => {
-  const { columns, data, loading, skip, rowsPerPage = 5 } = props;
+  const { columns, data, loading, skip = 0, rowsPerPage = 5 } = props;
   const currentPage = skip / rowsPerPage + 1;
 
   return (

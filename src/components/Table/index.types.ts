@@ -12,9 +12,9 @@ export interface TableProps<T> {
   columns: TableColumn<T>[];
   data: T[];
   loading: boolean;
-  onChangePagination: (key: number) => void;
-  skip: number;
+  onChangePagination?: (key: number) => void;
+  skip?: number;
   rowsPerPage?: number;
   onChangeRowPerPage?: (value: number) => void;
-  totalData: number;
+  totalData?: number;
 }

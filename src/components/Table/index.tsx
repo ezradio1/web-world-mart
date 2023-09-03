@@ -11,11 +11,11 @@ const Table = <T extends unknown>(props: TableProps<T>) => {
   const {
     columns,
     data,
-    onChangePagination,
-    skip,
+    onChangePagination = noop,
+    skip = 0,
     rowsPerPage = 5,
     onChangeRowPerPage = noop,
-    totalData,
+    totalData = 0,
   } = props;
   const { isMobile } = useIsMobile();
 
@@ -34,29 +34,32 @@ const Table = <T extends unknown>(props: TableProps<T>) => {
           <DesktopTable {...props} columns={columnsWithNumber} />
         )}
       </div>
-      <div className="flex flex-col bg-white p-3 md:flex-row justify-between gap-3 md:gap-4 items-end md:items-center mt-2">
-        <div className="flex gap-2 items-center">
-          <p className="text-xs">Rows per page: </p>
-          <Select
-            optionPosition="top"
-            options={PER_PAGE_OPTIONS}
-            value={rowsPerPage}
-            className="w-16 h-7 md:h-10"
-            onChange={(evt) =>
-              onChangeRowPerPage(Number(evt.target.value || 5))
-            }
+      {onChangePagination !== noop ? (
+        <div className="flex flex-col bg-white p-3 md:flex-row justify-between gap-3 md:gap-4 items-end md:items-center mt-2">
+          <div className="flex gap-2 items-center">
+            <p className="text-xs">Rows per page: </p>
+            <Select
+              optionPosition="top"
+              options={PER_PAGE_OPTIONS}
+              value={rowsPerPage}
+              className="w-16 h-7 md:h-10"
+              onChange={(evt) =>
+                onChangeRowPerPage(Number(evt.target.value || 5))
+              }
+            />
+          </div>
+
+          <Pagination
+            isPrevDisabled={data.length === 0 || currentPage === 1}
+            isNextDisabled={data.length * currentPage === totalData}
+            onChangePagination={onChangePagination}
+            currentPage={currentPage}
+            paginationLength={Math.ceil(totalData / rowsPerPage)}
+            rowsPerPage={rowsPerPage}
+            skip={skip}
           />
         </div>
-        <Pagination
-          isPrevDisabled={data.length === 0 || currentPage === 1}
-          isNextDisabled={data.length * currentPage === totalData}
-          onChangePagination={onChangePagination}
-          currentPage={currentPage}
-          paginationLength={Math.ceil(totalData / rowsPerPage)}
-          rowsPerPage={rowsPerPage}
-          skip={skip}
-        />
-      </div>
+      ) : null}
     </div>
   );
 };

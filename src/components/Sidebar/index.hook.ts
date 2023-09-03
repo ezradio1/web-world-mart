@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 const useIndex = () => {
-  const [isCollapse, setIsCollapse] = useState(false);
+  const pathname = usePathname();
+  const isActiveMenu = (key: string) => pathname.includes(key);
 
-  return { isCollapse, setIsCollapse };
+  return { isActiveMenu };
 };
 
 export default useIndex;

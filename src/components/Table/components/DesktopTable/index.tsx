@@ -8,7 +8,7 @@ const DesktopTable = <T extends unknown>(props: TableProps<T>) => {
     columns,
     data,
     loading,
-    skip,
+    skip = 0,
     rowsPerPage = 5,
   } = props;
 
