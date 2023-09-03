@@ -21,14 +21,15 @@ const useIndex = () => {
     min: min ? Number(min) : undefined,
     max: max ? Number(max) : undefined,
     q,
-    category: category || "",
-    brand: brand || "",
+    category: category || undefined,
+    brand: brand || undefined,
   });
   const [modal, setModal] = useState("");
   const [selectedData, setSelectedData] = useState<ProductData | undefined>();
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [searchValue, setSearchValue] = useState(q);
   const [brandValue, setBrandValue] = useState(brand);
+  const [categoryValue, setCategoryValue] = useState(category);
   const [priceFilter, setPriceFilter] = useState<PriceFilter>({
     min: min ? Number(min) : undefined,
     max: max ? Number(max) : undefined,
@@ -44,37 +45,34 @@ const useIndex = () => {
     url,
     params: queryParams,
   });
+  const [totalData, setTotalData] = useState(data?.total);
 
   const router = useCustomRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!category) {
+    setTotalData(data?.total || 0);
+  }, [data?.total]);
+
+  useEffect(() => {
+    if (searchValue) {
+      console.log("TRIGERED");
       const currentQueryParams = {
         ...queryParams,
-        q: searchValue || undefined,
-        skip: searchValue ? skip : 0,
-        brand: queryParams.brand || undefined,
-        category: queryParams.category || undefined,
-        min: queryParams.min || undefined,
-        max: queryParams.max || undefined,
+        q: searchValue,
+        skip: 0,
       };
-      if (searchValue) {
-        setLoadingSearch(true);
-        const timeoutId = setTimeout(() => {
-          setUrl(PRODUCT_API_ENDPOINT.SEARCH_PRODUCT);
-          handleSetQueryParams(currentQueryParams);
-          setLoadingSearch(false);
-        }, 800);
-        return () => {
-          clearTimeout(timeoutId);
-        };
-      } else {
-        setUrl(PRODUCT_API_ENDPOINT.ALL_PRODUCT);
-        router.push({ pathname, params: currentQueryParams });
-      }
+      setLoadingSearch(true);
+      const timeoutId = setTimeout(() => {
+        setUrl(PRODUCT_API_ENDPOINT.SEARCH_PRODUCT);
+        handleSetQueryParams(currentQueryParams);
+        setLoadingSearch(false);
+      }, 800);
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
-  }, [searchValue, category, queryParams.brand]);
+  }, [searchValue]);
 
   const columns: TableColumn<ProductData>[] = [
     {
@@ -138,17 +136,20 @@ const useIndex = () => {
   const handleChangeSearch = (evt: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(evt.target.value);
     if (evt.target.value === "") {
-      setQueryParams((prevState) => ({
-        ...prevState,
+      setLoadingSearch(false);
+      setUrl(PRODUCT_API_ENDPOINT.ALL_PRODUCT);
+      handleSetQueryParams({
+        ...queryParams,
         q: undefined,
         skip: 0,
-      }));
+      });
       return;
     }
   };
 
   const handleChangeCategory = (evt: ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value;
+    setCategoryValue(value);
     setUrl(
       value
         ? `${PRODUCT_API_ENDPOINT.FILTER_PRODUCT_BY_CATEGORY}/${value}`
@@ -156,7 +157,6 @@ const useIndex = () => {
     );
     handleSetQueryParams({
       ...queryParams,
-      q: undefined,
       skip: 0,
       category: value || undefined,
     });
@@ -186,25 +186,68 @@ const useIndex = () => {
   };
 
   const productList = useCallback(() => {
-    if (searchValue) {
-      return data?.products.filter((el) =>
-        el.title.toLowerCase().includes(String(searchValue).toLowerCase())
-      );
-    } else if (brandValue) {
-      return data?.products.filter((el) => el.brand === brandValue);
-    } else if (priceFilter.max && priceFilter.min) {
-      return data?.products.filter(
-        (el) =>
-          el.price >= Number(priceFilter.min) &&
-          el.price <= Number(priceFilter.max)
-      );
-    } else {
-      return data?.products;
+    let filteredProducts = data?.products || [];
+    if (
+      url === PRODUCT_API_ENDPOINT.ALL_PRODUCT ||
+      url.includes(PRODUCT_API_ENDPOINT.FILTER_PRODUCT_BY_CATEGORY)
+    ) {
+      if (searchValue) {
+        filteredProducts = filteredProducts.filter((el) =>
+          el.title.toLowerCase().includes(String(searchValue).toLowerCase())
+        );
+      }
+      if (categoryValue) {
+        filteredProducts = filteredProducts.filter(
+          (el) => el.category === categoryValue
+        );
+      }
+      if (brandValue) {
+        filteredProducts = filteredProducts.filter(
+          (el) => el.brand === brandValue
+        );
+      }
+      if (priceFilter.max && priceFilter.min) {
+        filteredProducts = filteredProducts.filter(
+          (el) =>
+            el.price >= Number(priceFilter.min) &&
+            el.price <= Number(priceFilter.max)
+        );
+      }
     }
-  }, [data?.products, searchValue, brandValue]);
+
+    return filteredProducts;
+  }, [
+    data?.products,
+    searchValue,
+    brandValue,
+    url,
+    categoryValue,
+    priceFilter,
+  ]);
+
+  useEffect(() => {
+    if (
+      (url === PRODUCT_API_ENDPOINT.ALL_PRODUCT ||
+        url.includes(PRODUCT_API_ENDPOINT.FILTER_PRODUCT_BY_CATEGORY)) &&
+      (searchValue ||
+        brandValue ||
+        categoryValue ||
+        (priceFilter.max && priceFilter.min))
+    )
+      setTotalData(productList().length);
+  }, [
+    brandValue,
+    categoryValue,
+    priceFilter.max,
+    priceFilter.min,
+    productList,
+    searchValue,
+    url,
+  ]);
 
   const handleSubmitPriceFilter = (value: { min: number; max: number }) => {
     setPriceFilter(value);
+    setUrl(PRODUCT_API_ENDPOINT.ALL_PRODUCT);
     handleSetQueryParams({ ...queryParams, min: value.min, max: value.max });
   };
 
@@ -233,6 +276,7 @@ const useIndex = () => {
     refetch,
     handleSubmitPriceFilter,
     handleClearPriceFilter,
+    totalData,
   };
 };
 

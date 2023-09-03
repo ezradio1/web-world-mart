@@ -34,6 +34,7 @@ const Products = () => {
     refetch,
     handleSubmitPriceFilter,
     handleClearPriceFilter,
+    totalData,
   } = useIndex();
   const { brandList, categoryList } = useFilterOptionContext();
 
@@ -119,7 +120,7 @@ const Products = () => {
             skip={Number(queryParams.skip || 0)}
             rowsPerPage={Number(queryParams.limit || 10)}
             onChangeRowPerPage={handleChangeRowPerPage}
-            totalData={data?.total || 0}
+            totalData={totalData}
           />
         </div>
       </ContentLayout>
