@@ -46,6 +46,7 @@ const useIndex = () => {
     params: queryParams,
   });
   const [totalData, setTotalData] = useState(data?.total);
+  const [showChart, setShowChart] = useState(false);
 
   const router = useCustomRouter();
   const pathname = usePathname();
@@ -171,6 +172,7 @@ const useIndex = () => {
     setBrandValue(value);
     handleSetQueryParams({
       ...queryParams,
+      skip: 0,
       limit: limitValue,
       brand: value || undefined,
     });
@@ -258,6 +260,7 @@ const useIndex = () => {
     setUrl(PRODUCT_API_ENDPOINT.ALL_PRODUCT);
     handleSetQueryParams({
       ...queryParams,
+      skip: 0,
       limit: limitValue,
       min: value.min,
       max: value.max,
@@ -296,6 +299,8 @@ const useIndex = () => {
     handleSubmitPriceFilter,
     handleClearPriceFilter,
     totalData,
+    showChart,
+    setShowChart,
   };
 };
 

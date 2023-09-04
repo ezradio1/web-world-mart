@@ -1,18 +1,19 @@
 import Button from "@/components/Button";
 import ContentLayout from "@/components/ContentLayout";
+import ErrorState from "@/components/ErrorState";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
 import Table from "@/components/Table";
 import { useFilterOptionContext } from "@/context/FilterOptionsContext";
-import { FiSearch } from "react-icons/fi";
+import { FiChevronDown, FiSearch } from "react-icons/fi";
 import ModalDelete from "./components/ModalDelete";
 import ModalForm from "./components/ModalForm";
+import ModalPriceRange from "./components/ModalPriceRange";
+import PriceFilterInput from "./components/PriceFilterInput";
 import { MODAL_STATE } from "./index.constants";
 import useIndex from "./index.hook";
-import ModalPriceRange from "./components/ModalPriceRange";
-import { AiFillCloseCircle } from "react-icons/ai";
-import PriceFilterInput from "./components/PriceFilterInput";
-import ErrorState from "@/components/ErrorState";
+import ProductChart from "./components/ProductChart";
+import clsx from "clsx";
 
 const Products = () => {
   const {
@@ -36,6 +37,8 @@ const Products = () => {
     handleSubmitPriceFilter,
     handleClearPriceFilter,
     totalData,
+    showChart,
+    setShowChart,
   } = useIndex();
   const { brandList, categoryList } = useFilterOptionContext();
 
@@ -114,7 +117,33 @@ const Products = () => {
             </Button>
           </div>
         </div>
-        <div className="mt-2">
+        <div className="mt-2 flex flex-col gap-2">
+          <div
+            className="bg-white border p-3 cursor-pointer"
+            onClick={() => setShowChart((prevState) => !prevState)}
+          >
+            <div className="flex justify-between items-center">
+              <p className="font-semibold">Show Chart</p>
+              <div
+                className={clsx("transition-all", {
+                  "rotate-180": showChart,
+                })}
+              >
+                <FiChevronDown />
+              </div>
+            </div>
+            <div
+              className={clsx(
+                "overflow-y-hidden transition-all duration-500 ease-out",
+                {
+                  "h-0": !showChart,
+                  "h-[600px]": showChart,
+                }
+              )}
+            >
+              {productList && <ProductChart products={productList} />}
+            </div>
+          </div>
           <Table
             columns={columns}
             data={productList || []}

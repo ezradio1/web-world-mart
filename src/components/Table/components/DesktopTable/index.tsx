@@ -66,7 +66,6 @@ const DesktopTable = <T extends unknown>(props: TableProps<T>) => {
                       >;
                       return (
                         <td
-                        
                           key={colIndex}
                           className={clsx(
                             "py-3 px-4",
