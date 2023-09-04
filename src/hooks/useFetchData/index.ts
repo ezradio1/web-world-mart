@@ -7,7 +7,7 @@ const useFetchData = <T extends unknown>(props: UseFetchDataProps<T>) => {
   const { url, params, skip = false } = props;
   const [returnValue, setReturnValue] = useState<ReturnValue<T>>({
     data: null,
-    loading: false,
+    loading: true,
     error: null,
   });
 

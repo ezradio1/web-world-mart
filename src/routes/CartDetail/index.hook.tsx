@@ -12,7 +12,7 @@ const useIndex = () => {
   const { data, loading, error } = useFetchData<CartDetailResponse>({
     url: `carts/${id}`,
   });
-  const { data: userData } = useFetchData<UserResponse>({
+  const { data: userData, loading: loadingUserData } = useFetchData<UserResponse>({
     url: `user/${data?.userId}`,
   });
 
@@ -56,6 +56,7 @@ const useIndex = () => {
     productList: data?.products,
     cartDetail: data,
     userData,
+    loadingUserData,
   };
 };
 
