@@ -1,19 +1,13 @@
 import ContentLayout from "@/components/ContentLayout";
+import ErrorState from "@/components/ErrorState";
 import Table from "@/components/Table";
-import React from "react";
 import useIndex from "./index.hook";
-import { noop } from "@/utils/noop";
 
 const CartDetail = () => {
-  const {
-    columns,
-    data,
-    loading,
-    error,
-    productList,
-    cartDetail,
-    userData,
-  } = useIndex();
+  const { columns, data, loading, error, productList, cartDetail, userData } =
+    useIndex();
+
+  if (error) return <ErrorState />;
 
   return (
     <div>

@@ -2,6 +2,7 @@ import ContentLayout from "@/components/ContentLayout";
 import Table from "@/components/Table";
 import React from "react";
 import useIndex from "./index.hook";
+import ErrorState from "@/components/ErrorState";
 
 const Carts = () => {
   const {
@@ -14,6 +15,9 @@ const Carts = () => {
     handleChangeRowPerPage,
     productList,
   } = useIndex();
+
+  if (error) return <ErrorState />;
+
   return (
     <div>
       <ContentLayout title="Cart List">

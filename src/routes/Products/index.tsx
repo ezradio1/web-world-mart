@@ -12,6 +12,7 @@ import useIndex from "./index.hook";
 import ModalPriceRange from "./components/ModalPriceRange";
 import { AiFillCloseCircle } from "react-icons/ai";
 import PriceFilterInput from "./components/PriceFilterInput";
+import ErrorState from "@/components/ErrorState";
 
 const Products = () => {
   const {
@@ -37,6 +38,8 @@ const Products = () => {
     totalData,
   } = useIndex();
   const { brandList, categoryList } = useFilterOptionContext();
+
+  if (error) return <ErrorState />;
 
   return (
     <div>
