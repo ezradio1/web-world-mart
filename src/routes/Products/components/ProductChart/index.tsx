@@ -36,11 +36,11 @@ const ProductChart = (props: ProductChartProps) => {
   }, [products]);
 
   return (
-    <div
-      className="bg-white border p-3 cursor-pointer"
-      onClick={() => setShowChart((prevState) => !prevState)}
-    >
-      <div className="flex justify-between items-center">
+    <div className="bg-white border p-3 cursor-pointer">
+      <div
+        className="flex justify-between items-center"
+        onClick={() => setShowChart((prevState) => !prevState)}
+      >
         <p className="font-semibold">Show Chart</p>
         <div
           className={clsx("transition-all", {
