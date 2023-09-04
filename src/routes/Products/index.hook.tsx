@@ -56,7 +56,6 @@ const useIndex = () => {
 
   useEffect(() => {
     if (searchValue) {
-      console.log("TRIGERED");
       const currentQueryParams = {
         ...queryParams,
         q: searchValue,

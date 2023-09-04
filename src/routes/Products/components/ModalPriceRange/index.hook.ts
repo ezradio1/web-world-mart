@@ -15,7 +15,6 @@ const useIndex = ({ onClose, onSubmitFilter }: ModalPriceRangeProps) => {
       : Number(form.highestPrice) <= Number(form.lowestPrice)
       ? "Highest price cannot be lower than the lowest price"
       : "";
-    console.log({ form });
 
     setError({
       lowestPrice,
