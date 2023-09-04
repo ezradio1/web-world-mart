@@ -42,7 +42,7 @@ const Table = <T extends unknown>(props: TableProps<T>) => {
               optionPosition="top"
               options={PER_PAGE_OPTIONS}
               value={rowsPerPage}
-              className="w-16 h-7 md:h-10"
+              className="w-[70px] md:h-10"
               onChange={(evt) =>
                 onChangeRowPerPage(Number(evt.target.value || 5))
               }

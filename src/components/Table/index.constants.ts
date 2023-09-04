@@ -11,4 +11,8 @@ export const PER_PAGE_OPTIONS = [
     label: 20,
     value: 20,
   },
+  {
+    label: 100,
+    value: 100,
+  },
 ];

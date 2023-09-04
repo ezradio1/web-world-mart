@@ -164,9 +164,17 @@ const useIndex = () => {
 
   const handleChangeBrand = (evt: ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value;
+    const limitValue =
+      value || queryParams.category || queryParams.min || queryParams.max
+        ? 100
+        : 10;
     setUrl(PRODUCT_API_ENDPOINT.ALL_PRODUCT);
     setBrandValue(value);
-    handleSetQueryParams({ ...queryParams, brand: value || undefined });
+    handleSetQueryParams({
+      ...queryParams,
+      limit: limitValue,
+      brand: value || undefined,
+    });
   };
 
   const handleSetQueryParams = (currentQueryParams: QueryParams) => {
@@ -246,14 +254,26 @@ const useIndex = () => {
   ]);
 
   const handleSubmitPriceFilter = (value: { min: number; max: number }) => {
+    const limitValue = value.min || value.max || queryParams.brand ? 100 : 10;
     setPriceFilter(value);
     setUrl(PRODUCT_API_ENDPOINT.ALL_PRODUCT);
-    handleSetQueryParams({ ...queryParams, min: value.min, max: value.max });
+    handleSetQueryParams({
+      ...queryParams,
+      limit: limitValue,
+      min: value.min,
+      max: value.max,
+    });
   };
 
   const handleClearPriceFilter = () => {
+    const limitValue = queryParams.brand ? 100 : 10;
     setPriceFilter({ min: 0, max: 0 });
-    handleSetQueryParams({ ...queryParams, min: undefined, max: undefined });
+    handleSetQueryParams({
+      ...queryParams,
+      limit: limitValue,
+      min: undefined,
+      max: undefined,
+    });
   };
 
   return {
