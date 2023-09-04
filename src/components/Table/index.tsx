@@ -39,10 +39,11 @@ const Table = <T extends unknown>(props: TableProps<T>) => {
           <div className="flex gap-2 items-center">
             <p className="text-xs">Rows per page: </p>
             <Select
+              withError={false}
               optionPosition="top"
               options={PER_PAGE_OPTIONS}
               value={rowsPerPage}
-              className="w-[70px] md:h-10"
+              className="w-[70px] h-7 md:h-10"
               onChange={(evt) =>
                 onChangeRowPerPage(Number(evt.target.value || 5))
               }

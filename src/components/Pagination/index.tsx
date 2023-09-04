@@ -49,7 +49,7 @@ const Pagination = (props: PaginationProps) => {
 
   const actionClassName = (isDisabled: boolean, page = "") =>
     clsx(
-      "rounded transition-all md:w-8 md:h-8 h-7 w-7 text-xs md:text-sm flex justify-center items-center",
+      "rounded transition-all md:w-8 md:h-8 h-6 w-6 text-xs md:text-sm flex justify-center items-center",
       {
         "cursor-not-allowed": isDisabled,
         "cursor-pointer hover:border-primary border-gray-400":
