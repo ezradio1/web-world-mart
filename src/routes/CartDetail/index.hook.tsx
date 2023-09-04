@@ -1,18 +1,13 @@
 import { TableColumn } from "@/components/Table/index.types";
-import useCustomRouter from "@/hooks/useCustomRouter";
 import useFetchData from "@/hooks/useFetchData";
-import useGetAllQueryParams from "@/hooks/useGetAllQueryParams";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useParams } from "next/navigation";
 import type {
   CartDetailResponse,
   ProductData,
-  QueryParams,
-  UserResponse,
+  UserResponse
 } from "./index.types";
 
 const useIndex = () => {
-  const routers = useRouter();
   const { id } = useParams();
   const { data, loading, error } = useFetchData<CartDetailResponse>({
     url: `carts/${id}`,
@@ -21,13 +16,10 @@ const useIndex = () => {
     url: `user/${data?.userId}`,
   });
 
-  const router = useCustomRouter();
-  const pathname = usePathname();
-
   const columns: TableColumn<ProductData>[] = [
     {
       key: "title",
-      header: "Name",
+      header: "product name",
     },
     {
       key: "price",

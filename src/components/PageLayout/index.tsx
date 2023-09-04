@@ -1,3 +1,4 @@
+"use client"
 import { GiHamburgerMenu } from "react-icons/gi";
 import Footer from "../Footer";
 import Sidebar from "../Sidebar";
