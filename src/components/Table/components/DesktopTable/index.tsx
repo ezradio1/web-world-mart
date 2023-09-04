@@ -4,13 +4,7 @@ import clsx from "clsx";
 import type { TableProps } from "../../index.types";
 
 const DesktopTable = <T extends unknown>(props: TableProps<T>) => {
-  const {
-    columns,
-    data,
-    loading,
-    skip = 0,
-    rowsPerPage = 5,
-  } = props;
+  const { columns, data, loading, skip = 0, rowsPerPage = 5 } = props;
 
   const getAlignment = (value: "left" | "center" | "right") => {
     const alignment = {
@@ -31,6 +25,7 @@ const DesktopTable = <T extends unknown>(props: TableProps<T>) => {
             <tr>
               {columns.map((column, index) => (
                 <th
+                  scope="col"
                   key={index}
                   className={clsx(
                     "py-3 px-4 text-left font-bold uppercase text-gray-600 border-b border-gray-300",
@@ -71,6 +66,7 @@ const DesktopTable = <T extends unknown>(props: TableProps<T>) => {
                       >;
                       return (
                         <td
+                        
                           key={colIndex}
                           className={clsx(
                             "py-3 px-4",
