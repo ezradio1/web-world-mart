@@ -137,7 +137,7 @@ const Products = () => {
                 "overflow-y-hidden transition-all duration-500 ease-out",
                 {
                   "h-0": !showChart,
-                  "h-[600px]": showChart,
+                  "h-[200px] md:h-[600px]": showChart,
                 }
               )}
             >
