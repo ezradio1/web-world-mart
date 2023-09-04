@@ -3,9 +3,7 @@ import { UseIsMobileProps } from "./index.types";
 
 const useIsMobile = (props?: UseIsMobileProps) => {
   const { maxWidth = "768px" } = props || {};
-  const [isMobile, setIsMobile] = useState(() => {
-    return window.matchMedia(`(max-width: ${maxWidth})`).matches;
-  });
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(`(max-width: ${maxWidth})`);
