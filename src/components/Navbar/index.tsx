@@ -14,6 +14,7 @@ const Navbar = () => {
     if (pathname === PRODUCTS_ROUTE) return "Products";
     else if (pathname === CARTS_ROUTE) return "Products";
     else if (pathname.includes(CARTS_DETAILS_ROUTE)) return "Cart Detail";
+    else return 'Page Not Found'
   };
 
   return (
