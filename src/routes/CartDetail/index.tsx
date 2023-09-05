@@ -21,7 +21,7 @@ const CartDetail = () => {
   return (
     <div>
       <ContentLayout title="Cart Detail">
-        <div className="border h-20 bg-white p-3 flex ">
+        <div className="border h-32 md:h-20 bg-white p-3 flex ">
           {loadingUserData ? (
             <div className="flex w-full">
               <Loader />
